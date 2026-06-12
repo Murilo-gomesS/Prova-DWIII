@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Reservas de Mesas</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Restaurante • Gestão de mesas</p>
+          <h1>Sistema de Reservas de Mesa</h1>
+          <p class="hero-copy">
+            Controle disponibilidade, reservas e status em tempo real com uma interface rápida e objetiva.
+          </p>
+        </div>
+        <div class="hero-card">
+          <span class="hero-card-label">Backend</span>
+          <strong>Express + TypeScript + MongoDB</strong>
+          <p>API local em <code>localhost:3000</code></p>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel panel-map">
+          <div class="panel-head">
+            <div>
+              <p class="section-label">Mapa visual</p>
+              <h2>Mesas do salão</h2>
+            </div>
+            <div class="legend">
+              <span><i class="dot available"></i> Disponível</span>
+              <span><i class="dot reserved"></i> Reservado</span>
+              <span><i class="dot occupied"></i> Ocupado</span>
+            </div>
+          </div>
+          <div id="tablesGrid" class="tables-grid"></div>
+        </section>
+
+        <section class="panel panel-form">
+          <div class="panel-head">
+            <div>
+              <p class="section-label">CRUD completo</p>
+              <h2 id="formTitle">Nova reserva</h2>
+            </div>
+            <button id="resetFormButton" class="ghost-button" type="button">Limpar</button>
+          </div>
+
+          <form id="reservationForm" class="form-grid">
+            <input type="hidden" id="reservationId" />
+            <label>
+              <span>Cliente</span>
+              <input id="clienteNome" name="clienteNome" type="text" placeholder="Nome completo" required />
+            </label>
+            <label>
+              <span>Contato</span>
+              <input id="contatoCliente" name="contatoCliente" type="text" placeholder="Telefone ou WhatsApp" required />
+            </label>
+            <label>
+              <span>Mesa</span>
+              <select id="mesaNumero" name="mesaNumero" required></select>
+            </label>
+            <label>
+              <span>Quantidade de pessoas</span>
+              <input id="quantidadePessoas" name="quantidadePessoas" type="number" min="1" step="1" required />
+            </label>
+            <label>
+              <span>Data e hora</span>
+              <input id="dataHoraReserva" name="dataHoraReserva" type="datetime-local" required />
+            </label>
+            <label class="full-width">
+              <span>Observações</span>
+              <textarea id="observacoes" name="observacoes" rows="3" placeholder="Preferência, comemoração, restrições..."></textarea>
+            </label>
+            <button class="primary-button full-width" type="submit">Salvar reserva</button>
+          </form>
+        </section>
+
+        <section class="panel panel-filters">
+          <div class="panel-head">
+            <div>
+              <p class="section-label">Consulta</p>
+              <h2>Filtros</h2>
+            </div>
+          </div>
+          <form id="filtersForm" class="filters-grid">
+            <input id="filterCliente" type="text" placeholder="Cliente" />
+            <input id="filterMesa" type="text" placeholder="Mesa" />
+            <input id="filterData" type="date" />
+            <select id="filterStatus">
+              <option value="">Todos os status</option>
+              <option value="reservado">Reservado</option>
+              <option value="ocupado">Ocupado</option>
+              <option value="finalizado">Finalizado</option>
+              <option value="cancelado">Cancelado</option>
+            </select>
+            <button class="primary-button" type="submit">Aplicar</button>
+            <button id="clearFiltersButton" class="ghost-button" type="button">Limpar filtros</button>
+          </form>
+        </section>
+
+        <section class="panel panel-list">
+          <div class="panel-head">
+            <div>
+              <p class="section-label">Reservas</p>
+              <h2>Lista atual</h2>
+            </div>
+            <span id="reservationCount" class="counter">0 registros</span>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Contato</th>
+                  <th>Mesa</th>
+                  <th>Pessoas</th>
+                  <th>Data</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="reservationsBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="tableModal" class="modal hidden" aria-hidden="true">
+      <div class="modal-card">
+        <div class="modal-head">
+          <div>
+            <p class="section-label">Detalhes da mesa</p>
+            <h3 id="modalTitle">Mesa</h3>
+          </div>
+          <button id="closeModalButton" class="icon-button" type="button">×</button>
+        </div>
+        <div id="modalContent" class="modal-content"></div>
+        <div class="modal-actions">
+          <button id="reserveTableButton" class="primary-button" type="button">Reservar esta mesa</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
